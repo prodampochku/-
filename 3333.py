@@ -54,12 +54,28 @@ class Profiles:
                     self.sp_cm.append(i) # в список sp_cm добавляем номер строки, которая проверялась
                 elif (self.cm - float(ws.cell(row=i, column=5).value)) ** 2 > (self.dm) ** 2: # если больше разности-ориентира, то ничего не делает программа
                     pass
-
-
-
-                '''print(ws.cell(row=1, column=j).value, ws.cell(row=i, column=j).value)'''
         print(self.sp_cy, self.sp_cx, self.sp_cm) #выводит номера строк, в которых были подходящие профили в порядке улучшения (3 списка для Сy, Cx, Cm)
+    def srav2(self):
+        wb = openpyxl.load_workbook('data.xlsx')
+        ws = wb.active
+        self.m = 9999.9
+        self.m1 = float()
+        self.k1 = 1
+        for k in range(1, len(self.sp_cy)):
+            print(k)
+            self.m1 = (((float(ws.cell(row=k, column=3).value) - float(self.cy))**2) + ((float(ws.cell(row=k, column=4).value) - float(self.cx))**2) + ((float(ws.cell(row=k, column=5).value) - float(self.cm))**2))**0.5
+            if self.m1 < self.m:
+                self.m = self.m1
+                self.k1 = k
+            print(self.m1)
+            print(self.k1)
+            for n in range(1,5):
+                print(ws.cell(row=self.k1, column=n).value)
+            self.m = 9999.9
+            self.k1 = 1
+            '''print(ws.cell(row=1, column=j).value, ws.cell(row=i, column=j).value)'''
+
 a = Profiles()
 '''a.poisk()'''
 a.srav()
-
+a.srav2()
