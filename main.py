@@ -1,9 +1,6 @@
 from PyQt5 import QtWidgets, uic
-
 import matplotlib
-import csv
 import openpyxl
-import pandas as pd
 
 
 app = QtWidgets.QApplication([])
@@ -143,6 +140,16 @@ def algoritm():
             m = m1
             k1 = val
 
+    
+
+    #вывод
+    ui.name_profile_print.setText(str((ws.cell(row=k1, column=1).value)))#print(ws.cell(row=k1, column=1).value)  # профиль
+    #print(ws.cell(row=k1, column=2).value)  # угол атаки
+    ui.Cy_finall.setText(str((ws.cell(row=k1, column=3).value)))# Cy
+    ui.Cx_finall.setText(str((ws.cell(row=k1, column=4).value)))# Cx
+    ui.Mz_finall.setText(str((ws.cell(row=k1, column=5).value)))# Cm
+    pixmap = QPixmap('Профили/' + (ws.cell(row=k1, column=6).value))
+    ui.label_14.setPixmap(pixmap)
     delta_cy = 9999.9  #возвращаем исходные значения для ориенторив
     delta_cx = 9999.9
     delta_cm = 9999.9
@@ -151,16 +158,6 @@ def algoritm():
     sp_cy = sp_cy.clear()  #списки очищаем
     sp_cx = sp_cx.clear()
     sp_cm = sp_cm.clear()
-
-    #вывод
-    #print("Наиближайший профиль")
-    ui.name_profile_print.setText(str((ws.cell(row=k1, column=1).value)))#print(ws.cell(row=k1, column=1).value)  # профиль
-    #print(ws.cell(row=k1, column=2).value)  # угол атаки
-    ui.Cy_finall.setText(str((ws.cell(row=k1, column=3).value)))# Cy
-    ui.Cx_finall.setText(str((ws.cell(row=k1, column=4).value)))# Cx
-    ui.Mz_finall.setText(str((ws.cell(row=k1, column=5).value)))# Cm
-    pixmap = QPixmap('Профили/' + (ws.cell(row=k1, column=6).value))
-    ui.label_14.setPixmap(pixmap)
     #Fy = float(ui.Cy_current.text())
     #Fx = float(ui.Cx_current.text())
     #Mz = float(ui.Mz_current.text())
