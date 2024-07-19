@@ -8,7 +8,7 @@ v = input()  #скорость набегающего потока
 Y = input()  #подъёмная сила
 X = input()  #сила лобового сопротивления
 Mz = input()  #продольный момент (тангажа)
-rho = 0.125 #плотность воздуха при н.у.; константа
+rho = 1.225 #плотность воздуха при н.у.; константа
 def str_to_num(line):  #функция переводит данное ей значение в строку (вместо line даём какую-либо переменную)
     line = line.strip()
     if line.isdigit():  #если значение состоит только из цифр, возвращает целочисленное значение
@@ -101,6 +101,13 @@ for k in range(0, len(sp_cm)):
         m = m1
         k1 = val
 
+#вывод
+print(ws.cell(row=k1, column=1).value)  # профиль
+print(ws.cell(row=k1, column=2).value)  # угол атаки
+print(ws.cell(row=k1, column=3).value)  # Cy
+print(ws.cell(row=k1, column=4).value)  # Cx
+print(ws.cell(row=k1, column=5).value)  # Cm
+
 delta_cy = 9999.9  #возвращаем исходные значения для ориенторив
 delta_cx = 9999.9
 delta_cm = 9999.9
@@ -109,12 +116,3 @@ k1 = 1
 sp_cy = sp_cy.clear()  #списки очищаем
 sp_cx = sp_cx.clear()
 sp_cm = sp_cm.clear()
-
-#вывод
-print("Наиближайший профиль")
-print(ws.cell(row=k1, column=1).value)  # профиль
-print(ws.cell(row=k1, column=2).value)  # угол атаки
-print(ws.cell(row=k1, column=3).value)  # Cy
-print(ws.cell(row=k1, column=4).value)  # Cx
-print(ws.cell(row=k1, column=5).value)  # Cm
-
