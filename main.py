@@ -1,5 +1,11 @@
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtGui import QPixmap
+import sys
+
+import matplotlib
+import csv
 import openpyxl
+import pandas as pd
 
 
 app = QtWidgets.QApplication([])
@@ -28,17 +34,11 @@ ui.label_11.setStyleSheet('color: rgb(0, 139, 210)')
 ui.label_12.setStyleSheet('color: rgb(0, 139, 210)')
 ui.label_15.setStyleSheet('color: rgb(0, 139, 210)')
 ui.label_16.setStyleSheet('color: rgb(0, 139, 210)')
+ui.label_17.setStyleSheet('color: rgb(0, 139, 210)')
 
-#v = 330 #скорость набегающего потока м/с
-#p = 1.225 #плотномть воздуха кг/м^3
-#def Count_Cy():
- #   Cy = 2*Fy/(S*p*v**2)
-    
-#def Count_Cx():
- #   Cx = 2*Fx/(S*p*v**2)
-    
-#def Count_Mz():
- #   Cm = (Mz*S*p*v**2)/2
+ui.geometry.setColumnCount(3)
+ui.geometry.setRowCount(25)
+
     
 def algoritm():
     # вводим с клавиатуры коэффициенты
@@ -49,7 +49,7 @@ def algoritm():
     Y = ui.Cy_current.text()  #подъёмная сила
     X = ui.Cx_current.text()  #сила лобового сопротивления
     Mz = ui.Mz_current.text()  #продольный момент (тангажа)
-    rho = 1,225 #плотность воздуха при н.у.; константа
+    rho = 0.125 #плотность воздуха при н.у.; константа
     def str_to_num(line):  #функция переводит данное ей значение в строку (вместо line даём какую-либо переменную)
         line = line.strip()
         if line.isdigit():  #если значение состоит только из цифр, возвращает целочисленное значение
@@ -139,47 +139,17 @@ def algoritm():
             m = m1
             k1 = val
 
+
     #вывод
+    #print("Наиближайший профиль")
     ui.name_profile_print.setText(str((ws.cell(row=k1, column=1).value)))#print(ws.cell(row=k1, column=1).value)  # профиль
     #print(ws.cell(row=k1, column=2).value)  # угол атаки
     ui.Cy_finall.setText(str((ws.cell(row=k1, column=3).value)))# Cy
     ui.Cx_finall.setText(str((ws.cell(row=k1, column=4).value)))# Cx
     ui.Mz_finall.setText(str((ws.cell(row=k1, column=5).value)))# Cm
-    pixmap = QPixmap('Профили/' + (ws.cell(row=k1, column=6).value))
+    pixmap = QPixmap('p5/Profiles/'+(ws.cell(row=k1, column=6).value))
     ui.label_14.setPixmap(pixmap)
     
-    delta_cy = 9999.9  #возвращаем исходные значения для ориенторив
-    delta_cx = 9999.9
-    delta_cm = 9999.9
-    m = 9999.9
-    k1 = 1
-    sp_cy = sp_cy.clear()  #списки очищаем
-    sp_cx = sp_cx.clear()
-    sp_cm = sp_cm.clear()
-    
-    #Fy = float(ui.Cy_current.text())
-    #Fx = float(ui.Cx_current.text())
-    #Mz = float(ui.Mz_current.text())
-    #S = float(ui.S_wing.text())
-    #Ba = float(ui.horda.text())
-    #cy = Count_Cy
-    #cx = Count_Cx
-    #cm = Count_Mz
-    #ui.Cy_current.setText('0.676')
-    #ui.Cx_current.setText('0.0470')
-    #ui.Mz_current.setText('0.155')
-    #cy = float(ui.Cy_current.text())
-    #cx = float(ui.Cx_current.text())
-    #cm = float(ui.Mz_current.text())
-
-    #ui.name_profile_print.setText(str((ws.cell(row=a, column=1).value))) #профиль
-    #print(ws.cell(row=number, column=2).value) #угол атаки
-    #ui.Cy_finall.setText(str((ws.cell(row=a, column=3).value)))# Cy
-    #ui.Cx_finall.setText(str((ws.cell(row=a, column=4).value)))# Cx
-    #ui.Mz_finall.setText(str((ws.cell(row=a, column=5).value)))# Cm
-    #pixmap = QPixmap('Профили/' + str((ws.cell(row=a, column=6).value)))
-    #ui.label_14.setPixmap(pixmap) #картинка
-   
 ui.btn1.clicked.connect(algoritm)
 ui.Tab_widget.setCurrentIndex(0)
 def tab_switch1():
