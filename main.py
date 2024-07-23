@@ -156,7 +156,8 @@ def algoritm():
     ui.Cy_finall.setText(str((aerodym_sheet.cell(row=k1, column=3).value)))  # Cy
     ui.Cx_finall.setText(str((aerodym_sheet.cell(row=k1, column=4).value)))  # Cx
     ui.Mz_finall.setText(str((aerodym_sheet.cell(row=k1, column=5).value)))  # Cm
-    pixmap = QPixmap('p5/Profiles/' + (aerodym_sheet.cell(row=k1, column=6).value))
+    #print(aerodym_sheet.cell(row=k1, column=6).value)
+    pixmap = QPixmap((aerodym_sheet.cell(row=k1, column=6).value))
     ui.label_14.setPixmap(pixmap)
 
 
