@@ -169,7 +169,7 @@ def algoritm():
             continue
         for j in range(k2, k2 + 3):  #выводим k2-й столбец и 2 следующих за ним
             print(geometry_sheet.cell(row=i, column=j).value, end='  ')  # end='  ' убрал перенос каждого значения на новую строку
-            ui.geometry.setItem(i, j, QTableWidgetItem(str(geometry_sheet.cell(row=i, column=j).value)))
+            ui.geometry.setItem(i-3, j-k2, QTableWidgetItem(str(geometry_sheet.cell(row=i, column=j).value)))
         print()  #а этот принт завершал строчку. Т.к. вывод в приложении в таблицу, то здесь ты, Маша, лишние принты уберёшь сама
 
 
