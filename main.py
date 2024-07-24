@@ -1,13 +1,9 @@
 from PyQt5 import QtWidgets, uic
-
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QTableWidgetItem
 import sys
 
 import matplotlib
-import csv
 import openpyxl
-import pandas as pd
 
 app = QtWidgets.QApplication([])
 
@@ -38,15 +34,6 @@ ui.label_17.setStyleSheet('color: rgb(0, 139, 210)')
 
 ui.geometry.setColumnCount(3)
 ui.geometry.setRowCount(25)
-#ui.geometry.horizontalHeaderLabels('X')
-#ui.geometry.horizontalHeaderItem(1).setToolTip('Yв')
-#ui.geometry.horizontalHeaderItem(2).setToolTip('Yн')
-
-#ui.geometry.setItem(0, 0, QTableWidgetItem(str(123)))
-
-#pixmap = QPixmap("ЦАГИ-6-12%")
-#pixmap = QPixmap("B-20%.png")
-#ui.label_14.setPixmap(pixmap)
 
 
 def algoritm():
@@ -58,14 +45,7 @@ def algoritm():
     Y = ui.Cy_current.text()  # подъёмная сила
     X = ui.Cx_current.text()  # сила лобового сопротивления
     Mz = ui.Mz_current.text()  # продольный момент (тангажа)
-    rho = 1.125  # плотность воздуха при н.у.; константа
-
-    if Y == '' or X == None or Mz == None:
-        ui.Cy_finall.setText('ЛОХ')  # Cy
-        ui.Cx_finall.setText('ТЫ ТУПОЙ?')  # Cx
-        ui.Mz_finall.setText('хахаха ну ты и идиот')  # Cm
-        return
-        
+    rho = 1.225  # плотность воздуха при н.у.; константа
 
     def str_to_num(line):  # функция переводит данное ей значение в строку (вместо line даём какую-либо переменную)
         line = line.strip()
@@ -82,16 +62,13 @@ def algoritm():
     v = str_to_num(line=v)
     Y = str_to_num(line=Y)
     X = str_to_num(line=X)
-    Mz = str_to_num(line=Mz) 
+    Mz = str_to_num(line=Mz)
 
     b_mid = (b_0 + b_k) / 2  # средняя хорда
     s = 0.5 * (b_0 + b_k) * l  # площадь крыла
-    cy = round(2 * Y / (rho * s * (v ** 2)), 3)  # коэффициент подъёмной силы
-    cx = round(2 * X / (rho * s * (v ** 2)), 3)  # коэффициент лобового сопротивления
-    cm = round(2 * Mz / (rho * s * b_mid * (v ** 2)), 3)  # коэффициент момента тангажа
-    print(cy)
-    print(cx)   
-    print(cm)
+    cy = 2 * Y / (rho * s * (v ** 2))  # коэффициент подъёмной силы
+    cx = 2 * X / (rho * s * (v ** 2))  # коэффициент лобового сопротивления
+    cm = 2 * Mz / (rho * s * b_mid * (v ** 2))  # коэффициент момента тангажа
 
     delta_cy = 9999.9  # ориентиры-сравнения
     delta_cx = 9999.9
@@ -171,13 +148,13 @@ def algoritm():
 
     # вывод
     # print("Наиближайший профиль")
-    ui.name_profile_print.setText(str((aerodym_sheet.cell(row=k1, column=1).value)))  # print(aerodym_sheet.cell(row=k1, column=1).value)  # профиль
+    ui.name_profile_print.setText(
+        str((aerodym_sheet.cell(row=k1, column=1).value)))  # print(aerodym_sheet.cell(row=k1, column=1).value)  # профиль
     # print(ws.cell(row=k1, column=2).value)  # угол атаки
     ui.Cy_finall.setText(str((aerodym_sheet.cell(row=k1, column=3).value)))  # Cy
     ui.Cx_finall.setText(str((aerodym_sheet.cell(row=k1, column=4).value)))  # Cx
     ui.Mz_finall.setText(str((aerodym_sheet.cell(row=k1, column=5).value)))  # Cm
-    print(aerodym_sheet.cell(row=k1, column=6).value)
-    pixmap = QPixmap((aerodym_sheet.cell(row=k1, column=6).value))
+    pixmap = QPixmap('p5/Profiles/' + (aerodym_sheet.cell(row=k1, column=6).value))
     ui.label_14.setPixmap(pixmap)
 
 
@@ -186,16 +163,13 @@ def algoritm():
             k2 = i  #если значение ячейки (название профиля) совпадает с тем, что мы нашли и вывели, то запоминаем номер столбца и заканчиваем цикл
             break
 
-    a = []
+    a=[]
     for i in range(3 , geometry_sheet.max_row):  #с 3 строчки, где начинаются координаты точек, до последней строчкив столбце цикл
         if geometry_sheet.cell(row=i, column=1).value == None:  #если ячейка в данной строке пустая, строка пропускается
             continue
         for j in range(k2, k2 + 3):  #выводим k2-й столбец и 2 следующих за ним
-            print(geometry_sheet.cell(row=i, column=j).value, end='  ')# end='  ' убрал перенос каждого значения на новую строку
-            for p in range(0, 26):
-                for h in range(0, 3):
-                    ui.geometry.setItem(p, h, QTableWidgetItem(str((geometry_sheet.cell(row=i, column=j).value))))
-                    break
+            print(geometry_sheet.cell(row=i, column=j).value, end='  ')  # end='  ' убрал перенос каждого значения на новую строку
+            ui.geometry.setItem(i, j, QTableWidgetItem(str(geometry_sheet.cell(row=i, column=j).value)))
         print()  #а этот принт завершал строчку. Т.к. вывод в приложении в таблицу, то здесь ты, Маша, лишние принты уберёшь сама
 
 
@@ -217,4 +191,3 @@ def tab_switch2():
 ui.btn1.clicked.connect(tab_switch2)
 ui.show()
 app.exec()
-
